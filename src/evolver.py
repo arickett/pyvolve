@@ -61,6 +61,13 @@ class Evolver(object):
             self.partitions = kwargs.get('partition', None)
         self.full_tree  = kwargs.get('tree', Node())
 
+        self.pdb_file = kwargs.get("pdb_file",None)
+        if self.pdb_file is None:
+            err = "Must specify pdb file"
+            raise ValueError(err)
+
+        self.coul = calcCoulEvolve.AncCoul(self.pdb_file)
+
         # ATTRIBUTE FOR THE sitewise_dnds_mutsel PROJECT
         self.select_root_type = kwargs.get('select_root_type', 'random').lower() # other options are min, max to select the lowest prob and highest prob state, respectively, for the root sequence.
         assert(self.select_root_type in ["random", "min", "max"]), "\nValue for keyword argument select_root_type argument must be either 'random', 'min', or 'max'. Default behavior is random."
@@ -531,6 +538,6 @@ class Evolver(object):
                     new_seq_coul.extend([MOLECULES.amino_acids[s.int_seq] for s in p])
                 print new_seq_coul
 
-                deltaE_p = calcCoulEvolve.X.calcAncEnergy(new_seq_coul)
+                deltaE_p = self.coul.calcAncEnergy(new_seq_coul)
 
         return new_seq

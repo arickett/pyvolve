@@ -26,7 +26,6 @@ __date__ = "160719"
 from sys import argv
 
 #EVO_SEQ = argv[1]
-PDB_FILE = "1stn.pdb"
 DIELEC_CONST = 20
 IONIC_STR = 0.1
 TEMP_K = 300
@@ -118,7 +117,6 @@ def readPDB_anc(pdb_file):
                                       float(line[46:54])])
 
     # Return the coordinates
-    print anc_charge
     return anc_coord, anc_charge
 
 def readSEQ(evo_seq):
@@ -208,10 +206,10 @@ def calculateEnergy(anc_coord,all_coord,anc_charge,evo_charge,charged_res,dielec
 
 class AncCoul:
 
-    def __init__(self,PDB_FILE):
+    def __init__(self,pdb_file):
 
-         self.all_coord = readPDB_evo(PDB_FILE)
-         self.anc_coord, self.anc_charge = readPDB_anc(PDB_FILE)
+         self.all_coord = readPDB_evo(pdb_file)
+         self.anc_coord, self.anc_charge = readPDB_anc(pdb_file)
 
     def calcAncEnergy(self,some_seq):
         evo_charge, charged_res = readSEQ(some_seq)
@@ -227,7 +225,7 @@ class AncCoul:
         return deltaE_p
 
 
-X = AncCoul(PDB_FILE)
+#X = AncCoul(PDB_FILE)
 
 
 # *************************************************************************** #

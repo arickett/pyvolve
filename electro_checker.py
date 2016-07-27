@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+"""
+electro_checker.py
+
+Evolves a given PDB sequence along a phylogenetic tree using pyvolve. If the
+evolved sequences have non-optimal charge distributions, the evolution process
+is repeated until the distributions are optimal compared to the original
+sequence.
+"""
+
+from sys import argv
+
+#PDB_FILE = argv[1]
+
+#import pdbtools
+import pyvolve
+
+#initial_seq = str(pdbtools.pdb_seq(PDB_FILE))
+initial_seq = ("KLHKEPATLIKAIDGDTVKLMYKGQPMTFRLLLVDTPETKHPKKGVEKYGPEASAFTKKMVENAKKIEVEFDKGQRTDKYGRGLAYIYADGKMVNEALVRQGLAKVAYVYKPNNTHEQHLRKSEAQAKKEKLNIWS")
+pdb = "1stn.pdb"
+tree = "((((UU00000470: 0.01626, UU00000596: 0.00811): 0.01350, UU00000507: 0.01113): 0.07109, GGB0000403: 0.02175): 0.01179, (((UU00000469: 0.04051, UU00000594: 0.01559): 0.00005, UU00000506: 0.05057): 0.01841, UU00000663: 0.00637): 0.11937, ((((((((UU00000642: 0.05820, XX00000001: 0.16584): 0.02052, GGC0000096: 0.10891): 0.00006, GGC0000358: 0.14460): 0.00000, GG00000269: 0.19383): 0.01696, (((UU00000563: 0.07786, UU00000599: 0.04113): 0.03745, (UU00000431: 0.02540, (UU00000486: 0.00006, UU00000523: 0.04667): 0.00000): 0.01608): 0.07365, UU00000574: 0.11273): 0.00006): 0.05992, ((UU00000576: 0.12295, ((UU00000429: 0.03917, UU00000199: 0.03930): 0.05180, UU00000605: 0.23409): 0.00000): 0.06629, GGB0000358: 0.33311): 0.06949): 0.04697, (((((UU00000522: 0.04928, UU00000482: 0.02131): 0.01067, UU00000448: 0.27589): 0.05142, (UU00000571: 0.03104, UU00000623: 0.07643): 0.06380): 0.09329, UU00000585: 0.29244): 0.26029, GG00000360: 0.47710): 0.17855): 0.07899, (((((((UU00000412: 0.00000, UU00000640: 0.00000): 0.01484, XX00000004: 0.01078): 0.02136, GGB0000096: 0.18664): 0.01588, GGA0000358: 0.16327): 0.02358, (XX00000003: 0.07482, GG00000270: 0.07042): 0.00008): 0.02210, (UU00000572: 0.64540, ((UU00000566: 0.26574, UU00000614: 0.07584): 0.26086, (UU00000518: 0.01455, UU00000485: 0.01091): 0.00482): 0.03585): 0.00000): 0.30214, ((GG00000359: 0.09184, GGA0000096: 0.16680): 0.02385, (UU00000607: 0.00699, ((UU00000524: 0.02837, UU00000483: 0.00738): 0.00916, UUX0000001: 0.01215): 0.02933): 0.07226): 0.33767): 0.06292): 0.63164);"
+
+phylogeny = pyvolve.read_tree(tree = tree)
+
+my_model = pyvolve.Model("LG")
+
+my_partition = pyvolve.Partition(models = my_model, root_sequence = initial_seq)
+
+my_evolver = pyvolve.Evolver(tree = phylogeny, partitions = my_partition, pdb_file = pdb)
+my_evolver()
+simulated_sequences = my_evolver.get_sequences()
